@@ -78,6 +78,11 @@ class MongoDBClient:
         self.collection.update_one(query, update)
         logger.info("Documento actualizado exitosamente.")
 
+    def delete_document(self, query={}):
+        """Eliminar un documento en la colección."""
+        self.collection.delete_one(query)
+        logger.info("Documento eliminado exitosamente.")
+
     def close(self):
         """Cerrar la conexión a la base de datos de MongoDB."""
         self.client.close()
