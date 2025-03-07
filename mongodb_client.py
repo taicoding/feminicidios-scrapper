@@ -27,7 +27,7 @@ class MongoDBClient:
             logger.error(f"No se pudo conectar a MongoDB: {e}")
 
     def create_unique_index(self, field):
-        """Crear un índice único en un campo especificado si no existe ya."""
+        """Crear un índice único en un campo especificado si no existe"""
         try:
             self.collection.create_index([(field, 1)], unique=True)
             logger.info(f"Índice único en '{field}' creado exitosamente.")
