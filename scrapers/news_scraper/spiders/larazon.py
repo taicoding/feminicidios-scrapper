@@ -9,20 +9,18 @@ class LarazonSpider(scrapy.Spider):
     name = "larazon"
     allowed_domains = ["larazon.bo"]
     start_urls = start_urls = [
-        f"https://larazon.bo/tags/feminicidio/page/2/" for i in range(1, 6)
+        f"https://larazon.bo/tags/feminicidio/page/{i}" for i in range(1, 3)
     ]
-    deny_section = (
-        [
-            r"/lr-article/",
-            r"/mundo/",
-            r"/voces/",
-            r"/opinion/",
-            r"/la-revista/",
-            r"/politico/",
-            r"/marcas/",
-            r"/economia/",
-        ],
-    )
+    deny_section = [
+        r"/lr-article/",
+        r"/mundo/",
+        r"/voces/",
+        r"/opinion/",
+        r"/la-revista/",
+        r"/politico/",
+        r"/marcas/",
+        r"/economia/",
+    ]
 
     def date_formatter(self, url, date_format="%Y%m%d"):
         try:
@@ -43,15 +41,24 @@ class LarazonSpider(scrapy.Spider):
             self.logger.error(f"Error formatting section: {e} at URL: {url}")
             return None
 
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(
+                url=url, meta={"impersonate": "chrome124"}, callback=self.parse
+            )
+
     def parse(self, response):
         extractor = LinkExtractor(
             restrict_css="article.jeg_post.jeg_pl_md_2.format-standard h3.jeg_post_title",
             deny=self.deny_section,
         )
+        links = extractor.extract_links(response)
+        self.logger.info(f"Se encontraron {len(links)} enlaces válidos")
 
-        for link in extractor.extract_links(response):
+        for link in links:
             yield scrapy.Request(
                 url=link.url,
+                meta={"impersonate": "chrome124"},
                 callback=self.parse_article,
             )
 
