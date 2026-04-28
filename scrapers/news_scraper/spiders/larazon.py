@@ -4,12 +4,14 @@ from scrapy.linkextractors import LinkExtractor
 from datetime import datetime
 from ..items import NewsScraperItem as NewsItem
 
+CURL_META = {"curl_cffi_options": {"impersonate": "chrome110"}}
+
 
 class LarazonSpider(scrapy.Spider):
     name = "larazon"
     allowed_domains = ["larazon.bo"]
     start_urls = start_urls = [
-        f"https://larazon.bo/tags/feminicidio/page/{i}" for i in range(1, 3)
+        f"https://larazon.bo/tags/feminicidio/page/{i}" for i in range(1, 4)
     ]
     deny_section = [
         r"/lr-article/",
@@ -43,9 +45,7 @@ class LarazonSpider(scrapy.Spider):
 
     def start_requests(self):
         for url in self.start_urls:
-            yield scrapy.Request(
-                url=url, meta={"impersonate": "chrome124"}, callback=self.parse
-            )
+            yield scrapy.Request(url=url, callback=self.parse, meta=CURL_META)
 
     def parse(self, response):
         extractor = LinkExtractor(
@@ -57,9 +57,7 @@ class LarazonSpider(scrapy.Spider):
 
         for link in links:
             yield scrapy.Request(
-                url=link.url,
-                meta={"impersonate": "chrome124"},
-                callback=self.parse_article,
+                url=link.url, callback=self.parse_article, meta=CURL_META
             )
 
     def parse_article(self, response):

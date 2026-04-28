@@ -23,14 +23,15 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-# CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 DOWNLOAD_DELAY = 3
+RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
-# CONCURRENT_REQUESTS_PER_DOMAIN = 16
+CONCURRENT_REQUESTS_PER_DOMAIN = 1
 # CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
@@ -43,7 +44,6 @@ COOKIES_ENABLED = False
 DEFAULT_REQUEST_HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
     "Accept-Language": "es-ES,es;q=0.9",
-    "Referer": "https://larazon.bo/",
     "Sec-Fetch-Dest": "document",
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "same-origin",
@@ -80,7 +80,7 @@ ITEM_PIPELINES = {
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_ENABLED = False
 # The initial download delay
 AUTOTHROTTLE_START_DELAY = 2
 # The maximum download delay to be set in case of high latencies
@@ -108,5 +108,3 @@ DOWNLOAD_HANDLERS = {
     "http": "scrapy_curl_cffi.handler.CurlCffiDownloadHandler",
     "https": "scrapy_curl_cffi.handler.CurlCffiDownloadHandler",
 }
-
-CURL_CFFI_IMPERSONATE = "chrome120"

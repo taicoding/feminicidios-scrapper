@@ -42,7 +42,7 @@ class NewsScraperItem(scrapy.Item):
     )
     title = scrapy.Field(output_processor=TakeFirst())
     body = scrapy.Field(input_processor=MapCompose(clean_body_text))
-    tag = scrapy.Field(input_processor=MapCompose(format_tags))
+    tags = scrapy.Field(input_processor=MapCompose(format_tags))
     section = scrapy.Field(output_processor=TakeFirst())
     source = scrapy.Field(output_processor=TakeFirst())
     published_at = scrapy.Field(output_processor=TakeFirst())
