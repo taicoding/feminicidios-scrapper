@@ -11,7 +11,7 @@ class LarazonSpider(scrapy.Spider):
     name = "larazon"
     allowed_domains = ["larazon.bo"]
     start_urls = start_urls = [
-        f"https://larazon.bo/tags/feminicidio/page/{i}" for i in range(1, 4)
+        f"https://larazon.bo/tags/feminicidio/page/{i}" for i in range(1, 3)
     ]
     deny_section = [
         r"/lr-article/",
@@ -64,7 +64,9 @@ class LarazonSpider(scrapy.Spider):
         loader = ItemLoader(item=NewsItem(), response=response)
         loader.add_value("url", response.url)
         loader.add_css("title", "div.entry-header h1::text")
-        loader.add_css("body", "div.content-inner p::text")
+        loader.add_value(
+            "body", response.css("div.content-inner p").xpath("string()").getall()
+        )
         loader.add_css("tags", "div.jeg_post_tags a::text")
         loader.add_value("source", self.name)
         section = self.section_formatter(response.url)

@@ -8,6 +8,7 @@
 import logging
 from datetime import datetime
 from mongoengine.errors import ValidationError, NotUniqueError
+from scrapy.exceptions import CloseSpider
 from models.news import News
 from utils.database import initialize_database
 
@@ -15,6 +16,8 @@ from utils.database import initialize_database
 class NewsScraperPipeline:
     def __init__(self):
         self.items_processed = 0
+        self.duplicates_skipped = 0
+        self.duplicate_threshold = 10
 
     def open_spider(self, spider):
         try:
@@ -25,22 +28,35 @@ class NewsScraperPipeline:
 
     def process_item(self, item, spider):
         try:
-            News.objects(url=item["url"]).update_one(
-                set_on_insert__title=item["title"],
-                set_on_insert__body=item["body"],
-                set_on_insert__tag=item.get("tags"),
-                set_on_insert__source=item["source"],
-                set_on_insert__section=item["section"],
-                set_on_insert__published_at=item["published_at"],
-                set_on_insert__created_at=datetime.now(),
-                upsert=True,
+            # Check if the item already exists to detect duplicates
+            exists = News.objects(url=item["url"]).first()
+            if exists:
+                self.duplicates_skipped += 1
+                spider.logger.warning(f"Duplicate item skipped: {item['url']}")
+                if self.duplicates_skipped >= self.duplicate_threshold:
+                    spider.logger.info(
+                        f"Reached duplicate threshold "
+                        f"({self.duplicate_threshold}). Closing spider."
+                    )
+                    raise CloseSpider(reason="too_many_duplicates")
+                return item
+
+            news = News(
+                url=item["url"],
+                title=item["title"],
+                body=item["body"],
+                tags=item["tags"],
+                source=item["source"],
+                section=item["section"],
+                published_at=item["published_at"],
             )
+            news.save()
             self.items_processed += 1
             spider.logger.debug(f"Item processed successfully: {item['url']}")
         except ValidationError as ve:
             spider.logger.warning(f"Validation error for item {item['url']}: {ve}")
-        except NotUniqueError as nue:
-            spider.logger.warning(f"Duplicate item skipped: {item['url']} - {nue}")
+        except CloseSpider:
+            raise
         except Exception as e:
             spider.logger.error(f"Error processing item {item['url']}: {e}")
         return item

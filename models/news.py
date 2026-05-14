@@ -1,11 +1,17 @@
-from mongoengine import Document, ObjectIdField, StringField, DateTimeField, ListField
+from mongoengine import (
+    Document,
+    ObjectIdField,
+    StringField,
+    DateTimeField,
+    ListField,
+    BooleanField,
+)
 
 from datetime import datetime
 
 
 class News(Document):
     meta = {"collection": "feminicidio"}
-    _id = ObjectIdField(primary_key=True)
     title = StringField(required=True)
     url = StringField(required=True, unique=True)
     body = ListField(StringField(), required=True)
@@ -13,5 +19,7 @@ class News(Document):
     source = StringField(required=True)
     section = StringField(required=True)
     published_at = DateTimeField(required=True)
+    llm_processed = BooleanField(default=False)
+    flagged = BooleanField(default=False)
     created_at = DateTimeField(default=datetime.now)
     updated_at = DateTimeField(default=datetime.now)
