@@ -7,6 +7,20 @@ import scrapy
 from itemloaders.processors import MapCompose, TakeFirst
 from datetime import datetime
 
+excluded_strings = [
+    " ",
+    "",
+    "|",
+    "X",
+    "|",
+    "YouTube",
+    "Para más información, visita nuestros canales oficiales:",
+    "Instagram",
+    "Visítanos en nuestro Canal de",
+    "WhatsApp",
+]
+excluded_paragraphs = ("Lea.", "Lea también", "Lea más")
+
 
 def clean_title(title):
     if title:
@@ -15,7 +29,7 @@ def clean_title(title):
 
 
 def clean_body_text(text):
-    # Combinación de tu body_formatter y caracteres especiales
+
     if text:
         cleaned = (
             text.strip()
@@ -26,7 +40,12 @@ def clean_body_text(text):
             .replace("”", '"')
             .replace("\u200b", " ")
         )
-        return cleaned if cleaned not in [" ", ""] else None
+        return (
+            cleaned
+            if cleaned not in excluded_strings
+            and not cleaned.startswith(excluded_paragraphs)
+            else None
+        )
     return None
 
 
