@@ -56,10 +56,10 @@ def format_tags(tag):
 
 
 class NewsScraperItem(scrapy.Item):
-    url = scrapy.Field(
+    url = scrapy.Field(output_processor=TakeFirst())
+    title = scrapy.Field(
         input_processor=MapCompose(clean_title), output_processor=TakeFirst()
     )
-    title = scrapy.Field(output_processor=TakeFirst())
     body = scrapy.Field(input_processor=MapCompose(clean_body_text))
     tags = scrapy.Field(input_processor=MapCompose(format_tags))
     section = scrapy.Field(output_processor=TakeFirst())
