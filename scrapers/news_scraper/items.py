@@ -51,7 +51,7 @@ def clean_body_text(text):
 
 def format_tags(tag):
     if tag:
-        return tag.lower().strip()
+        return tag.lower().strip().replace("#", "")
     return tag
 
 
