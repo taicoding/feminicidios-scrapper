@@ -107,4 +107,11 @@ FEED_EXPORT_ENCODING = "utf-8"
 DOWNLOAD_HANDLERS = {
     "http": "scrapy_curl_cffi.handler.CurlCffiDownloadHandler",
     "https": "scrapy_curl_cffi.handler.CurlCffiDownloadHandler",
+    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 }
+
+PLAYWRIGHT_BROWSER_TYPE = "chromium"
+PLAYWRIGHT_DEFAULT_NAVIGATION_TIMEOUT = 30000
+
+TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
