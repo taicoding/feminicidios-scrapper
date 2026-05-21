@@ -4,7 +4,7 @@ from scrapy.linkextractors import LinkExtractor
 from datetime import datetime
 from ..items import NewsScraperItem as NewsItem
 
-CURL_META = {"curl_cffi_options": {"impersonate": "chrome110"}}
+CURL_META = {"playwright": True}
 
 
 class LarazonSpider(scrapy.Spider):

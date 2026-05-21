@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = "news_scraper.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -28,25 +28,26 @@ CONCURRENT_REQUESTS = 1
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 5
 RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 1
 # CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-COOKIES_ENABLED = False
+COOKIES_ENABLED = True
 
 # Disable Telnet Console (enabled by default)
 # TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "es-ES,es;q=0.9",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "same-origin",
+    "Cache-Control": "max-age=0",
+    "DNT": "1",
+    "Pragma": "no-cache",
     "Upgrade-Insecure-Requests": "1",
 }
 
