@@ -10,7 +10,6 @@ from datetime import datetime
 from mongoengine.errors import ValidationError, NotUniqueError
 from scrapy.exceptions import CloseSpider
 from models.news import News
-from utils.database import initialize_database
 
 
 class NewsScraperPipeline:
@@ -19,11 +18,7 @@ class NewsScraperPipeline:
         self.duplicates_in_pipeline = 0
 
     def open_spider(self, spider):
-        try:
-            initialize_database()
-            logging.info("Database connection established successfully.")
-        except Exception as e:
-            spider.logger.error(f"Failed to connect to the database: {e}")
+        pass
 
     def process_item(self, item, spider):
         try:
@@ -45,7 +40,7 @@ class NewsScraperPipeline:
             )
             news.save()
             self.items_processed += 1
-            spider.logger.info(f"✓ Item saved: {item['title'][:50]}...")
+            spider.logger.info(f"Item saved: {item['title'][:50]}...")
 
         except ValidationError as ve:
             spider.logger.warning(f"Validation error for item {item['url']}: {ve}")

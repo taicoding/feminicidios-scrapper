@@ -75,7 +75,10 @@ class NewsScraperDownloaderMiddleware:
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
         s = cls()
-        initialize_database()
+        try:
+            initialize_database()
+        except Exception as e:
+            raise RuntimeError(f"Failed to initialize database connection: {e}")
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
