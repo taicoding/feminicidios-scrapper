@@ -5,12 +5,12 @@ A Scrapy-based web scraper that collects news articles about femicides from majo
 ## 📋 Features
 
 - **Multi-source scraping**: Collects articles from 6 major Bolivian news outlets:
-  - [El Deber](https://eldeber.com.bo)
-  - [El Diario](https://www.eldiario.net)
-  - [El País](https://elpais.bo)
-  - [La Razón](https://larazon.bo)
-  - [Los Tiempos](https://www.lostiempos.com)
-  - [Opinion](https://www.opinion.com.bo)
+  - [El Deber](https://eldeber.com.bo) from Santa Cruz
+  - [El Diario](https://www.eldiario.net) from La Paz
+  - [El País](https://elpais.bo) from Tarija
+  - [La Razón](https://larazon.bo) from La Paz
+  - [Los Tiempos](https://www.lostiempos.com) from Cochabamba
+  - [Opinion](https://www.opinion.com.bo) from Cochabamba
 - **MongoDB integration**: Stores structured data with MongoEngine ORM
 - **Metadata extraction**: Captures title, body, tags, section, publication date, and source
 - **LLM processing support**: Tracks articles processed by language models for analysis
