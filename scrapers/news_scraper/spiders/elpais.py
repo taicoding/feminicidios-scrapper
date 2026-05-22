@@ -9,7 +9,7 @@ class ElpaisSpider(scrapy.Spider):
     name = "elpais"
     allowed_domains = ["elpais.bo"]
     start_urls = [
-        f"https://elpais.bo/tags/view/Feminicidio?page={i}" for i in range(1, 3)
+        f"https://elpais.bo/tags/view/Feminicidio?page={i}" for i in range(1, 5)
     ]
     deny_section = [
         "/reportajes/",
