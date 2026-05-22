@@ -60,6 +60,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
+    "news_scraper.middlewares.NewsScraperDownloaderMiddleware": 350,  # Ejecutar antes de descargar
     "scrapy_curl_cffi.middlewares.CurlCffiMiddleware": 200,
     "scrapy_curl_cffi.middlewares.DefaultHeadersMiddleware": 400,
     "scrapy_curl_cffi.middlewares.UserAgentMiddleware": 500,

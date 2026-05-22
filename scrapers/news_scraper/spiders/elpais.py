@@ -29,7 +29,7 @@ class ElpaisSpider(scrapy.Spider):
             date_publish = datetime.strptime(date_str, date_format)
             return date_publish
         except Exception as e:
-            self.logger.error(f"Error al formatear fecha: {e}")
+            self.logger.error(f"Error formatting date: {e}")
             return None
 
     def section_formatter(self, url):
@@ -38,7 +38,7 @@ class ElpaisSpider(scrapy.Spider):
             section = url_split[3]
             return section
         except Exception as e:
-            self.logger.error(f"Error al formatear sección: {e}")
+            self.logger.error(f"Error formatting section: {e}")
             return url
 
     def start_requests(self):
@@ -51,7 +51,7 @@ class ElpaisSpider(scrapy.Spider):
             deny=self.deny_section,
         )
         links = extractor.extract_links(response)
-        self.logger.info(f"Se encontraron {len(links)} enlaces válidos")
+        self.logger.info(f"Found {len(links)} valid links")
 
         for link in links:
             yield scrapy.Request(url=link.url, callback=self.parse_article)

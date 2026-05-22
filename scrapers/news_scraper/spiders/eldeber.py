@@ -51,7 +51,7 @@ class EldeberSpider(scrapy.Spider):
             deny=self.deny_section,
         )
         links = extractor.extract_links(response)
-        self.logger.info(f"Se encontraron {len(links)} enlaces válidos")
+        self.logger.info(f"Found {len(links)} valid links")
 
         for link in links:
             yield scrapy.Request(url=link.url, callback=self.parse_article)

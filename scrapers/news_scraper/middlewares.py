@@ -4,9 +4,13 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.exceptions import IgnoreRequest, CloseSpider
+import logging
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+from models.news import News
+from utils.database import initialize_database
 
 
 class NewsScraperSpiderMiddleware:
@@ -61,10 +65,17 @@ class NewsScraperDownloaderMiddleware:
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
 
+    def __init__(self):
+        self.duplicates_count = 0
+        self.duplicate_threshold = 10
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.spider_closed = False
+
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
         s = cls()
+        initialize_database()
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
@@ -72,13 +83,45 @@ class NewsScraperDownloaderMiddleware:
         # Called for each request that goes through the downloader
         # middleware.
 
-        # Must either:
-        # - return None: continue processing this request
-        # - or return a Response object
-        # - or return a Request object
-        # - or raise IgnoreRequest: process_exception() methods of
-        #   installed downloader middleware will be called
+        # If CloseSpider was already raised, ignore pending requests
+        if self.spider_closed:
+            raise IgnoreRequest("Spider already closing due to duplicate threshold")
+
+        # Check if URL already exists in MongoDB
+        if self._is_duplicate(request.url, spider):
+            self.duplicates_count += 1
+            spider.logger.warning(
+                f"[DUPLICATE] URL already in database: {request.url} "
+                f"({self.duplicates_count}/{self.duplicate_threshold})"
+            )
+
+            # If threshold is reached, close the spider (only once)
+            if self.duplicates_count >= self.duplicate_threshold:
+                self.spider_closed = True  # Mark as closed
+                spider.logger.info(
+                    f"Duplicate URL threshold reached ({self.duplicate_threshold}). "
+                    "Closing spider..."
+                )
+                raise CloseSpider(reason="duplicate_url_threshold_reached")
+
+            # Ignore this request without making HTTP call
+            raise IgnoreRequest(f"URL already in database: {request.url}")
+
+        # Reset counter when a new URL is found
+        self.duplicates_count = 0
         return None
+
+    def _is_duplicate(self, url, spider):
+        """
+        Checks if URL already exists in MongoDB database.
+        Returns True if exists (is duplicate), False otherwise.
+        """
+        try:
+            exists = News.objects(url=url).first()
+            return exists is not None
+        except Exception as e:
+            spider.logger.error(f"Error checking duplicate in database: {e}")
+            return False
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
