@@ -34,10 +34,7 @@ def clean_body_text(text):
         cleaned = (
             text.strip()
             .replace("\xa0", " ")
-            .replace('"', "")
             .replace("\ufeff", " ")
-            .replace("“", '"')
-            .replace("”", '"')
             .replace("\u200b", " ")
         )
         return (

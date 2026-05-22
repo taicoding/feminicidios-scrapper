@@ -9,7 +9,7 @@ class LostiemposSpider(scrapy.Spider):
     name = "lostiempos"
     allowed_domains = ["www.lostiempos.com"]
     start_urls = [
-        f"https://www.lostiempos.com/etiqueta/feminicidio?page={i}" for i in range(1, 3)
+        f"https://www.lostiempos.com/etiqueta/feminicidio?page={i}" for i in range(0, 3)
     ]
     deny_section = [
         "/tendencias/",
