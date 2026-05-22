@@ -38,8 +38,6 @@ class EldiarioSpider(scrapy.Spider):
             return None
 
     def check_category(self, category):
-        print(category, self.allowed_sections)
-        print(set(category.lower().split(" - ")))
         if not category:
             return False
         return self.allowed_sections.intersection(set(category.lower().split(" - ")))
