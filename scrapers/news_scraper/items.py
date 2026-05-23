@@ -1,0 +1,64 @@
+# Define here the models for your scraped items
+#
+# See documentation in:
+# https://docs.scrapy.org/en/latest/topics/items.html
+
+import scrapy
+from itemloaders.processors import MapCompose, TakeFirst
+from datetime import datetime
+
+excluded_strings = [
+    " ",
+    "",
+    "|",
+    "X",
+    "|",
+    "YouTube",
+    "Para más información, visita nuestros canales oficiales:",
+    "Instagram",
+    "Visítanos en nuestro Canal de",
+    "WhatsApp",
+]
+excluded_paragraphs = ("Lea.", "Lea también", "Lea más")
+
+
+def clean_title(title):
+    if title:
+        return title.replace("“", '"').replace("”", '"').strip()
+    return title
+
+
+def clean_body_text(text):
+
+    if text:
+        cleaned = (
+            text.strip()
+            .replace("\xa0", " ")
+            .replace("\ufeff", " ")
+            .replace("\u200b", " ")
+        )
+        return (
+            cleaned
+            if cleaned not in excluded_strings
+            and not cleaned.startswith(excluded_paragraphs)
+            else None
+        )
+    return None
+
+
+def format_tags(tag):
+    if tag:
+        return tag.lower().strip().replace("#", "")
+    return tag
+
+
+class NewsScraperItem(scrapy.Item):
+    url = scrapy.Field(output_processor=TakeFirst())
+    title = scrapy.Field(
+        input_processor=MapCompose(clean_title), output_processor=TakeFirst()
+    )
+    body = scrapy.Field(input_processor=MapCompose(clean_body_text))
+    tags = scrapy.Field(input_processor=MapCompose(format_tags))
+    section = scrapy.Field(output_processor=TakeFirst())
+    source = scrapy.Field(output_processor=TakeFirst())
+    published_at = scrapy.Field(output_processor=TakeFirst())
