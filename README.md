@@ -57,7 +57,7 @@ Or install dependencies manually:
 pip install scrapy mongoengine scrapy-playwright brotli python-dotenv
 ```
 
-## 4. Install Playwright browsers
+### 4. Install Playwright browsers
 
 ```bash
 playwright install chromium
