@@ -19,7 +19,7 @@ A Scrapy-based web scraper that collects news articles about femicides from majo
 
 ## 🛠️ Prerequisites
 
-- Python 3.8+
+- Python 3.12+
 - MongoDB instance (local or Atlas)
 - pip or conda package manager
 
@@ -54,7 +54,13 @@ pip install -e .
 Or install dependencies manually:
 
 ```bash
-pip install scrapy mongoengine curl_cffi python-dotenv
+pip install scrapy mongoengine scrapy-playwright brotli python-dotenv
+```
+
+## 4. Install Playwright browsers
+
+```bash
+playwright install chromium
 ```
 
 ## ⚙️ Configuration
@@ -82,7 +88,7 @@ DATABASE_NAME=feminicidios_db
 Navigate to the scrapers directory:
 
 ```bash
-cd scrapers/news_scraper
+cd scrapers/news_scraper/spiders
 ```
 
 Run a specific spider:
@@ -137,7 +143,6 @@ feminicidios-scrapper/
 ├── utils/                   # Utility modules
 │   ├── __init__.py
 │   └── database.py          # MongoDB connection
-├── legacy/                  # Legacy code and notebooks
 ├── pyproject.toml          # Project metadata and dependencies
 └── README.md               # This file
 ```

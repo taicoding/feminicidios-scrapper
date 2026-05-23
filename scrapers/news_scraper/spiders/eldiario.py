@@ -42,7 +42,7 @@ class EldiarioSpider(scrapy.Spider):
             return False
         return self.allowed_sections.intersection(set(category.lower().split(" - ")))
 
-    def start_requests(self):
+    async def start(self):
         for url in self.start_urls:
             yield scrapy.Request(url=url, callback=self.parse, meta=CURL_META)
 

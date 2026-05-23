@@ -6,9 +6,10 @@ build-backend = "setuptools.build_meta"
 name = "feminicidios-bolivia"
 version = "0.1.0"
 dependencies = [
-    "scrapy==2.11.2",
+    "scrapy",
     "mongoengine",
     "scrapy-playwright",
+    "brotli",
     "python-dotenv",
 ]
 
