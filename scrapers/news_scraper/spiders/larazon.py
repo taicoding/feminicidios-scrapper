@@ -43,7 +43,7 @@ class LarazonSpider(scrapy.Spider):
             self.logger.error(f"Error formatting section: {e} at URL: {url}")
             return None
 
-    def start_requests(self):
+    async def start(self):
         for url in self.start_urls:
             yield scrapy.Request(url=url, callback=self.parse, meta=CURL_META)
 

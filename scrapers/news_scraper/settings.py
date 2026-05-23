@@ -60,12 +60,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    "news_scraper.middlewares.NewsScraperDownloaderMiddleware": 350,  # Ejecutar antes de descargar
-    "scrapy_curl_cffi.middlewares.CurlCffiMiddleware": 200,
-    "scrapy_curl_cffi.middlewares.DefaultHeadersMiddleware": 400,
-    "scrapy_curl_cffi.middlewares.UserAgentMiddleware": 500,
-    "scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware": None,
-    "scrapy.downloadermiddlewares.useragent.UserAgentMiddleware": None,
+    "news_scraper.middlewares.NewsScraperDownloaderMiddleware": 350,
 }
 
 # Enable or disable extensions
@@ -103,12 +98,9 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 DOWNLOAD_HANDLERS = {
-    "http": "scrapy_curl_cffi.handler.CurlCffiDownloadHandler",
-    "https": "scrapy_curl_cffi.handler.CurlCffiDownloadHandler",
     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 }
